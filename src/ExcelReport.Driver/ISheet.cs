@@ -14,5 +14,7 @@ namespace ExcelReport.Driver
         int CopyRows(int start, int end);
 
         int RemoveRows(int start, int end);
+
+        void MergeCells(int firstRow, int lastRow, int firstCol, int lastCol);
     }
 }

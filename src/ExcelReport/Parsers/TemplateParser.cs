@@ -12,6 +12,10 @@ namespace ExcelReport.Parsers
 
         private static readonly RepeaterEndParser REPEATER_END_PARSER = new RepeaterEndParser();
 
+        private static readonly DataTableHeaderParser DATATABLE_HEADER_PARSER = new DataTableHeaderParser();
+
+        private static readonly DataTableDataParser DATATABLE_DATA_PARSER = new DataTableDataParser();
+
         public WorkbookContainer Parse(IWorkbook workbook)
         {
             WorkbookContainer workbookContainer = new WorkbookContainer();
@@ -36,6 +40,16 @@ namespace ExcelReport.Parsers
                             foreach (var tagName in REPEATER_END_PARSER.Parse(cell.GetStringValue()))
                             {
                                 workbookContainer.Sheets[sheet.SheetName].Repeaters[tagName].End = new Location(cell.RowIndex, cell.ColumnIndex);
+                            }
+
+                            foreach (var tagName in DATATABLE_HEADER_PARSER.Parse(cell.GetStringValue()))
+                            {
+                                workbookContainer.Sheets[sheet.SheetName].DataTablers[tagName].HeaderStart = new Location(cell.RowIndex, cell.ColumnIndex);
+                            }
+
+                            foreach (var tagName in DATATABLE_DATA_PARSER.Parse(cell.GetStringValue()))
+                            {
+                                workbookContainer.Sheets[sheet.SheetName].DataTablers[tagName].DataStart = new Location(cell.RowIndex, cell.ColumnIndex);
                             }
                         }
                     }

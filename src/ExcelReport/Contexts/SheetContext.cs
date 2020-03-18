@@ -36,6 +36,28 @@ namespace ExcelReport.Contexts
             return row[location.ColumnIndex];
         }
 
+        public ICell GetCell(int row, int column, bool copyBeforeColumnCell = false)
+        {
+            IRow r = _sheet[row];
+
+            if (!copyBeforeColumnCell)
+            {
+                if (r.IsNull())
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                if (column - 1 >= 0)
+                {
+                    r.CopyCell(column - 1, column);
+                }
+            }
+
+            return r[column];
+        }
+
         public void CopyRepeaterTemplate(Repeater repeater, Action processTemplate)
         {
             var startRowIndex = _rowIndexAccumulation.GetCurrentRowIndex(repeater.Start.RowIndex);
@@ -57,6 +79,36 @@ namespace ExcelReport.Contexts
 
             int span = _sheet.RemoveRows(startRowIndex, endRowIndex);
             _rowIndexAccumulation.Add(-span);
+        }
+
+        public void FillDataTablerLayout(DataTabler dataTabler, Action processDataTableFilled)
+        {
+            var startRowIndex = _rowIndexAccumulation.GetCurrentRowIndex(dataTabler.DataStart.RowIndex);
+            var endRowIndex = _rowIndexAccumulation.GetCurrentRowIndex(dataTabler.DataEnd.RowIndex);
+
+            ICell headerCell = GetCell(dataTabler.HeaderStart);
+            headerCell.Value = headerCell.GetStringValue().CutEndOf($"$<{dataTabler.Name}>[header]");
+
+            ICell dataStartCell = GetCell(dataTabler.DataStart);
+            dataStartCell.Value = dataStartCell.GetStringValue().CutEndOf($"$<{dataTabler.Name}>[data]");
+
+            for (int s = 0, l = endRowIndex - startRowIndex; s < l; s++)
+            {
+                _sheet.CopyRows(startRowIndex + s, startRowIndex + s);
+            }
+
+            processDataTableFilled();
+
+            _rowIndexAccumulation.Add(endRowIndex - startRowIndex + 1);
+        }
+
+        public void MergeCells(int firstRow, int lastRow, int firstCol, int lastCol)
+        {
+            if (firstRow < 0 || lastRow < firstRow || firstCol < 0 || lastCol < firstCol)
+            {
+                return;
+            }
+            _sheet.MergeCells(firstRow, lastRow, firstCol, lastCol);
         }
     }
 }

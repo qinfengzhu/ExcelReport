@@ -1,4 +1,5 @@
 ﻿using ExcelReport.Driver.CSV.Extends;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -92,6 +93,10 @@ namespace ExcelReport.Driver.CSV
         public object GetOriginal()
         {
             return this;
+        }
+        public void MergeCells(int firstRow, int lastRow, int firstCol, int lastCol)
+        {
+            throw new NotImplementedException();
         }
     }
 }

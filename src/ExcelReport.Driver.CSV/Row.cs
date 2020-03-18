@@ -73,5 +73,9 @@ namespace ExcelReport.Driver.CSV
         {
             return this;
         }
+        public ICell CopyCell(int sourceIndex, int targetIdnex)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

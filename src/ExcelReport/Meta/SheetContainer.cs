@@ -5,5 +5,7 @@
         public Container<Parameter> Parameters { get; } = new Container<Parameter>();
 
         public Container<Repeater> Repeaters { get; } = new Container<Repeater>();
+
+        public Container<DataTabler> DataTablers { get; } = new Container<DataTabler>();
     }
 }

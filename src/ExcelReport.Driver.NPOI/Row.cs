@@ -34,5 +34,19 @@ namespace ExcelReport.Driver.NPOI
         {
             return NpoiRow;
         }
+
+        public ICell CopyCell(int sourceIndex, int targetIdnex)
+        {
+            var sourceCell = NpoiRow.GetCell(sourceIndex);
+            var targetCell = NpoiRow.CopyCell(sourceIndex, targetIdnex);
+
+            if (null != sourceCell.CellStyle)
+            {
+                targetCell.CellStyle = sourceCell.CellStyle;
+            }
+            targetCell.SetCellType(sourceCell.CellType);
+            ICell cell = targetCell.GetAdapter();
+            return cell;
+        }
     }
 }

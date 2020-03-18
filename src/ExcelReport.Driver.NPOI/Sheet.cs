@@ -1,5 +1,6 @@
 ﻿using ExcelReport.Driver.NPOI.Extends;
 using NPOI.Extend;
+using NPOI.SS.Util;
 using System.Collections;
 using System.Collections.Generic;
 using NpoiRow = NPOI.SS.UserModel.IRow;
@@ -46,6 +47,12 @@ namespace ExcelReport.Driver.NPOI
         public object GetOriginal()
         {
             return NpoiSheet;
+        }
+
+        public void MergeCells(int firstRow, int lastRow, int firstCol, int lastCol)
+        {
+            CellRangeAddress region = new CellRangeAddress(firstRow, lastRow, firstCol, lastCol);
+            NpoiSheet.AddMergedRegion(region);
         }
     }
 }

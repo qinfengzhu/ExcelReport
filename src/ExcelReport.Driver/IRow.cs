@@ -8,5 +8,6 @@ namespace ExcelReport.Driver
         {
             get;
         }
+        ICell CopyCell(int sourceIndex, int targetIdnex);
     }
 }
